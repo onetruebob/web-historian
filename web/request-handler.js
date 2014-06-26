@@ -14,9 +14,13 @@ var getHandler = function(req, res){
   httpHelpers.serveAssets(res, requestedFile);
 };
 
+var postHandler = function(req, res){
+  httpHelpers.createArchiveRequest(req, res);
+};
+
 var statusRouter = {
   "GET": getHandler,
-  //"POST": postHandler,
+  "POST": postHandler,
   //"OPTIONS": optionsHandler
 };
 

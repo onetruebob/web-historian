@@ -56,6 +56,41 @@ exports.notFoundHelper = notFoundHelper = function(res) {
   res.end("File Not Found");
 };
 
+exports.createArchiveRequest = function (req, res){
+  var archiveURL ='';
 
+  var redirectToURL = function(url) {
+    headers.location = url;
+    res.writeHead(302, headers);
+    res.end();
+    delete headers.location;
+  };
 
-// As you progress, keep thinking about what helper functions you can put here!
+  var urlArchivedResult = function(exists) {
+    if (exists) {
+      redirectToURL(archiveURL);
+    } else {
+      archive.isUrlInList(archiveURL, urlInListResult);
+    }
+  };
+
+  var urlInListResult = function (urlFound){
+    if(!urlFound) {
+      archive.addUrlToList(archiveURL);
+    }
+
+    redirectToURL('loading.html');
+
+  };
+
+  //call handlers to get the archive URL and then pass it to functions
+  //to add it to the list and return results.
+  req.on('data', function(chunk){
+    archiveURL += chunk;
+  });
+
+  req.on('end', function(){
+    archiveURL = archiveURL.split('=')[1];
+    archive.isURLArchived(archiveURL, urlArchivedResult);
+  });
+};

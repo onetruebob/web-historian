@@ -9,7 +9,7 @@ var _ = require('underscore');
  * customize it in any way you wish.
  */
 
-exports.paths = {
+exports.paths = paths = {
   'siteAssets' : path.join(__dirname, '../web/public'),
   'archivedSites' : path.join(__dirname, '../archives/sites'),
   'list' : path.join(__dirname, '../archives/sites.txt')
@@ -25,17 +25,30 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(){
+exports.readListOfUrls = readListOfUrls = function(callback){
+  fs.readFile(paths.list, {encoding: 'utf8'},function(error, data){
+    if (error) throw error;
+    data = data.split('\n');
+    callback(error, data);
+  });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url, callback){
+  readListOfUrls(function(error, data){
+    if(error) throw error;
+    var urlFound = data.indexOf(url) === -1 ? false : true; //TODO: Revisit searching for URL in list
+    callback(urlFound);
+  });
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url){
+  fs.appendFile(paths.list, url, {encoding: 'utf8'}, function(err) {
+    if (err) { console.log(err); }
+  });
 };
 
-exports.isURLArchived = function(url){
-  //fs.exisits();
+exports.isURLArchived = function(url, callback){
+  fs.exists(paths.archivedSites + '/' + url, callback);
 };
 
 exports.downloadUrls = function(){
