@@ -28,9 +28,12 @@ exports.serveAssets = function(res, asset) {
   };
 
   var findFileInSites = function (res, asset){
-    var assetPath = archive.paths.archivedSites + asset;
+    asset = asset[0] === '/' ? asset.slice(1) : asset;
+    archive.getHtmlforUrl(asset, findInSitesResult);
 
-    fs.readFile(assetPath, findInSitesResult);
+    // var assetPath = archive.paths.archivedSites + asset;
+
+    // fs.readFile(assetPath, findInSitesResult);
   };
 
   var findInSitesResult = function(error, data){
