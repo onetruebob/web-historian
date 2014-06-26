@@ -76,10 +76,13 @@ exports.createArchiveRequest = function (req, res){
 
   var urlInListResult = function (urlFound){
     if(!urlFound) {
-      archive.addUrlToList(archiveURL);
+      archive.addUrlToList(archiveURL, function(err){
+        if (err) throw err;
+        redirectToURL('loading.html');
+      });
+    } else {
+      redirectToURL('loading.html');
     }
-
-    redirectToURL('loading.html');
 
   };
 
@@ -90,6 +93,7 @@ exports.createArchiveRequest = function (req, res){
   });
 
   req.on('end', function(){
+    console.log(archiveURL);
     archiveURL = archiveURL.split('=')[1];
     archive.isURLArchived(archiveURL, urlArchivedResult);
   });

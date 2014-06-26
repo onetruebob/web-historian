@@ -29,22 +29,19 @@ exports.readListOfUrls = readListOfUrls = function(callback){
   fs.readFile(paths.list, {encoding: 'utf8'},function(error, data){
     if (error) throw error;
     data = data.split('\n');
-    callback(error, data);
+    callback(data);
   });
 };
 
 exports.isUrlInList = function(url, callback){
-  readListOfUrls(function(error, data){
-    if(error) throw error;
+  readListOfUrls(function(data){
     var urlFound = data.indexOf(url) === -1 ? false : true; //TODO: Revisit searching for URL in list
     callback(urlFound);
   });
 };
 
-exports.addUrlToList = function(url){
-  fs.appendFile(paths.list, url, {encoding: 'utf8'}, function(err) {
-    if (err) { console.log(err); }
-  });
+exports.addUrlToList = function(url, callback){
+  fs.appendFile(paths.list, url + '\n', {encoding: 'utf8'}, callback);
 };
 
 exports.isURLArchived = function(url, callback){
