@@ -1,0 +1,1 @@
+* * * * * /Users/student/.nvm/v0.10.26/bin/node /Users/student/Code/jakeburkhead/2014-06-web-historian/workers/htmlfetcher.js >> /Users/student/Code/jakeburkhead/2014-06-web-historian/nodehistory.log 2>&1
